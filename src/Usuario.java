@@ -3,16 +3,19 @@ import java.util.HashSet;
 
 public abstract class Usuario {
 	private String username;
-	private HashSet<Jogo> jogosComprados;
 	private double money;
+	private int x2pPoints;
+	
+	private HashSet<Jogo> jogosComprados;
 	
 	public Usuario(String username){
 		this.username = username;
 	}
 	
-	private boolean comprarJogo(Jogo jogo){
-		if (money > jogo.getPreco()){
-			money -= jogo.getPreco();
+	public boolean comprarJogo(Jogo jogo){
+		double comDesconto = jogo.getPreco()-calculaDesconto(jogo);
+		if (money >= comDesconto){
+			money -= comDesconto;
 			jogosComprados.add(jogo);
 			return true;
 		} else {
@@ -20,9 +23,11 @@ public abstract class Usuario {
 		}
 	}
 	
-	private void addMoney(double money){
+	public void addMoney(double money){
 		this.money += money;
 	}
 	
-	public abstract double calculaDesconto(Jogo jogo);
+	public double calculaDesconto(Jogo jogo){
+		return 0;
+	}
 }
