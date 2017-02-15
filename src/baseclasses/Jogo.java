@@ -1,8 +1,9 @@
+package baseclasses;
 import java.util.HashSet;
 import java.util.Set;
 
 
-public  class Jogo {	
+public class Jogo {	
 	private String nome;
 	private double preco;
 	

@@ -1,3 +1,4 @@
+package baseclasses;
 import java.util.HashMap;
 
 public abstract class Usuario {

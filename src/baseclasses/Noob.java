@@ -1,3 +1,4 @@
+package baseclasses;
 
 public class Noob extends Usuario {
 	private int x2pPoints;
