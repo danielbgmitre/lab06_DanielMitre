@@ -1,25 +1,23 @@
 package baseclasses;
 
-public class Noob extends Usuario {
-	private int x2pPoints;
+import errorclasses.InvalidFieldValueException;
+
+public class Noob extends TipoUsuario {
 	
-	public Noob(String username) {
-		super(username);
-		x2pPoints = 0;
-	}
-	
-	@Override
-	public boolean comprarJogo(Jogo jogo){
-		if (super.comprarJogo(jogo)){
-			x2pPoints += jogo.getPreco()*10;
-			return true;
-		} else {
-			return false;
-		}
+	public Noob() throws InvalidFieldValueException  {
+		super();
+		setStartingPoints(0);
+		setTipo("Noob");
 	}
 	
 	@Override
 	public double calculaDesconto(Jogo jogo){
 		return jogo.getPreco()*0.10;
 	}
+
+	@Override
+	public int pontosPorCompra(Jogo jogo) {
+		return (int) jogo.getPreco() * 10; 
+	}
+	
 }

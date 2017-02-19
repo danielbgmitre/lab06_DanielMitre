@@ -1,75 +1,109 @@
 package baseclasses;
-import java.util.HashMap;
 
-public abstract class Usuario {
+import errorclasses.*;
+
+public class Usuario {
 	private String username;
+	private String nome;
 	private double money;
 	private int x2pPoints;
+	private TipoUsuario tipo;
+	private JogoCollection jogos;
 	
-	private HashMap<String, Jogo> jogosComprados;
-	
-	public Usuario(String username){
+	public Usuario(String username, String nome) throws InvalidFieldValueException  {
 		this.username = username;
+		this.nome = nome;
+		money = 0;
+		x2pPoints = 0;
+		tipo = new Noob();
+		jogos = new JogoCollection();
 	}
 	
 	public String getUsername(){
-		return this.username;
+		return username;
 	}
 	
-	public boolean podeComprar(Jogo jogo){
-		if (money >= calculaPreco(jogo)){
+	public String getNome(){
+		return nome;
+	}
+	
+	public String getTipoName(){
+		return tipo.getTipo();
+	}
+	
+	public int getX2p(){
+		return x2pPoints;
+	}
+	
+	public boolean upgrade() throws InvalidFieldValueException  {
+		if ((tipo.getClass() == Noob.class) && x2pPoints >= 1000){
+			Veterano upgraded = new Veterano();
+			mudarTipo(upgraded);
 			return true;
+		}
+		return false;
+	}
+	
+	public void mudarTipo(TipoUsuario novoTipo){
+		tipo = novoTipo;
+		x2pPoints += novoTipo.getStartingPoints();
+	}
+	
+	public void addX2p(int x2p) throws InvalidFieldValueException  {
+		if (x2p < 0){
+			throw new InvalidFieldValueException();
 		} else {
-			return false;
+			this.x2pPoints += x2p;
 		}
 	}
 	
-	public boolean comprarJogo(Jogo jogo){
-		if (podeComprar(jogo)){
-			money -= calculaPreco(jogo);
-			jogosComprados.put(jogo.getNome(), jogo);
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	public void addMoney(double money){
-		this.money += money;
-	}
-	
-	public double calculaDesconto(Jogo jogo){
-		return 0;
+	public boolean podeComprar(Jogo jogo) throws InvalidFieldValueException {
+		return tipo.podeComprar(money, jogo);
 	}
 	
 	public double calculaPreco(Jogo jogo){
-		return jogo.getPreco() - calculaDesconto(jogo);
+		return tipo.calculaPreco(jogo);
 	}
 	
-	public void registraJogada(String gameName, int score, boolean zerou){
-		x2pPoints += jogosComprados.get(gameName).registraJogada(score, zerou);
+	public boolean addMoney(double money) throws InvalidFieldValueException{
+		if (money <= 0){
+			throw new InvalidFieldValueException();
+		} else {
+			this.money += money;
+			return true;
+		}
+	}
+	
+	public double getMoney(){
+		return money;
+	}
+	
+	public boolean compraJogo(Jogo jogo) throws InvalidFieldValueException  {
+		if (tipo.podeComprar(money, jogo)){
+			this.money -= (tipo.calculaPreco(jogo));
+			jogos.add(jogo.getClone());
+			addX2p(tipo.pontosPorCompra(jogo));
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((username == null) ? 0 : username.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Usuario other = (Usuario) obj;
+	public void registraJogada(String nomeDoJogo, int score, boolean zerou) throws FakeHighscoreException, GameNotFoundException, InvalidFieldValueException  {
+		if (nomeDoJogo == null || nomeDoJogo.trim().equals("")){
+			throw new InvalidFieldValueException();
+		}		
+		Jogo jogo = jogos.get(nomeDoJogo);
+		if (jogo == null){
+			throw new GameNotFoundException();
+		} 
+		addX2p(jogo.registraJogada(score, zerou));
 		
-		if (!username.equals(other.username))
-			return false;
-		return true;
+	}
+
+	public void listarJogos() {
+		System.out.println("Lista de Jogos:");
+		jogos.listarJogos();
 	}
 	
 	
