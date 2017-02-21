@@ -1,13 +1,13 @@
 package testclasses;
 
 import static org.junit.Assert.*;
+import jogo.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import errorclasses.*;
-
-import baseclasses.*;
+import usuario.Usuario;
+import excecoes.*;
 
 public class UsuarioTest {
 	public Usuario eduarda;

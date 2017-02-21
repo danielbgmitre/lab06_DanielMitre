@@ -1,13 +1,12 @@
 package testclasses;
 
 import static org.junit.Assert.*;
+import jogo.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import errorclasses.*;
-
-import baseclasses.*;
+import excecoes.*;
 
 public class JogoTest {
 	Plataforma marioWorld;

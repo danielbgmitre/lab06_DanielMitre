@@ -1,12 +1,14 @@
 package testclasses;
 
 import static org.junit.Assert.*;
+import jogo.*;
+import loja.Loja;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import errorclasses.*;
-import baseclasses.*;
+import usuario.*;
+import excecoes.*;
 
 public class LojaTest {
 	Loja loja;
